@@ -176,14 +176,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
 <script>
-  // Prepare data
-  const N = {{ input_values.N }};
-  const P = {{ input_values.P }};
-  const K = {{ input_values.K }};
-  const cropLabels = {{ top_crops | map(attribute='crop') | list | tojson }};
-  let cropData = {{ top_crops | map(attribute='prob') | list | tojson }};
+  // ✅ Prepare data using safe JSON injection
+  const inputValues = JSON.parse('{{ input_values | tojson | safe }}');
+  const topCrops = JSON.parse('{{ top_crops | tojson | safe }}');
 
-  // Soil Chart (actual values)
+  const N = inputValues.N;
+  const P = inputValues.P;
+  const K = inputValues.K;
+
+  const cropLabels = topCrops.map(c => c.crop);
+  let cropData = topCrops.map(c => Number(c.prob));
+
+  // Soil Chart
   const soilCtx = document.getElementById('soilChart').getContext('2d');
   new Chart(soilCtx, {
     type: 'bar',

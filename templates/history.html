@@ -87,7 +87,7 @@
     <h2>{{ session['user'] }}'s Prediction History</h2>
 
     <form method="GET" action="{{ url_for('history') }}">
-      <input type="text" name="query" placeholder="Search by crop, location, or date" value="{{ request.args.get('query', '') }}">
+      <input name="query" type="text" placeholder="Search by crop, location, or date" value="{{ request.args.get('query', '') }}">
       <button type="submit">Search</button>
     </form>
 
